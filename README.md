@@ -1,4 +1,4 @@
-﻿# Instruction to reproduce the incompatibility of HeteroCL and TVM inicubator-TVM!
+﻿# Instruction to reproduce the incompatibility of HeteroCL and TVM contained in incubator-TVM!
 
  - `git clone https://github.com/paldebjit/isra_ufl.git ISRA`
  - `cd ISRA`
