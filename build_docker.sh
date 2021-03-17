@@ -32,8 +32,8 @@ then
 		echo "Setting DOCKER_BUILDKIT environment variables.."
 		export DOCKER_BUILDKIT=1
 	fi
-	docker build --network=host -f Dockerfile_${2}.${1} -t debjitpal/vta .
+	docker build --network=host -f Dockerfile_${2}.${1} -t ${USER}/vta .
 	docker run -v $pwd/hostdir:/opt/hostdir \
                -h docker \
-               -it debjitpal/vta:latest
+               -it ${USER}/vta:latest
 fi
