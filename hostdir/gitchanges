@@ -1,0 +1,24 @@
+On branch bsim_fpga
+Your branch is up to date with 'origin/bsim_fpga'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   vta/python/vta/beh/config.py
+	modified:   vta/python/vta/beh/instructions/store.py
+	modified:   vta/python/vta/beh/state.py
+	modified:   vta/python/vta/environment.py
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	vta/3rdparty
+	vta/python/3rdparty
+	vta/python/vta/beh/environment.py
+	vta/python/vta/beh/instructions/config.py
+	vta/python/vta/beh/instructions/environment.py
+	vta/python/vta/beh/instructions/intrin.py
+	vta/python/vta/beh/instructions/state.py
+	vta/python/vta/beh/instructions/store.cc
+	vta/python/vta/beh/intrin.py
+
+no changes added to commit (use "git add" and/or "git commit -a")

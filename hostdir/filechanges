@@ -1,0 +1,89 @@
+diff --git a/vta/python/vta/beh/config.py b/vta/python/vta/beh/config.py
+index 200a09eec..8e588d199 100644
+--- a/vta/python/vta/beh/config.py
++++ b/vta/python/vta/beh/config.py
+@@ -1,5 +1,5 @@
+ '''configuration of bsim'''
+-from ..environment import get_env
++from environment import get_env
+ 
+ env = get_env() # pylint: disable=invalid-name
+ 
+diff --git a/vta/python/vta/beh/instructions/store.py b/vta/python/vta/beh/instructions/store.py
+index 8d11774f6..238ca1d8a 100644
+--- a/vta/python/vta/beh/instructions/store.py
++++ b/vta/python/vta/beh/instructions/store.py
+@@ -1,4 +1,5 @@
+ '''modeling STORE instruction'''
++import state
+ import heterocl as hcl
+ 
+ # Opcode, store encoding
+@@ -23,6 +24,7 @@ def store(instr, out_mem, dram):
+     #hcl.print(dram_base, "- dram_base: 0x%x\n")
+     #hcl.print(y_size, "- y_size: %d\n")
+     #hcl.print(x_size, "- x_size: %d\n")
++    '''
+     with hcl.if_(x_size.v == 0):
+         trace_mgr.Event("EXE", "SNOP %016lx%016lx\n", (instr[128:64], instr[64:0]))
+         trace_mgr.Event("RET", "SNOP %016lx%016lx\n", (instr[128:64], instr[64:0]))
+@@ -30,6 +32,8 @@ def store(instr, out_mem, dram):
+         trace_mgr.Event("EXE", "SOUT %016lx%016lx\n", (instr[128:64], instr[64:0]))
+         store_2d(sram_base, dram_base, x_size, y_size, x_stride, out_mem, dram)
+         trace_mgr.Event("RET", "SOUT %016lx%016lx\n", (instr[128:64], instr[64:0]))
++    '''
++    store_2d(sram_base, dram_base, x_size, y_size, x_stride, out_mem, dram)
+ 
+ def store_2d(sram_base, dram_base, x_size, y_size, x_stride, sram, dram):
+     '''sub-block of store'''
+@@ -44,6 +48,7 @@ def store_2d(sram_base, dram_base, x_size, y_size, x_stride, sram, dram):
+                 dram[dram_idx + row*ncols + col] = tile[row][col]
+             hcl.mutate((nrows, ncols), move_tile)
+         hcl.mutate((y_size, x_size), fmutate, 'store_data')
++    '''
+         def trace_sram(y, x):
+             sram_idx = sram_base + x_size * y + x
+             def trace_vector(row, col):
+@@ -53,3 +58,13 @@ def store_2d(sram_base, dram_base, x_size, y_size, x_stride, sram, dram):
+             trace_mgr.Event("+ST_SRAM", "\n")
+         if trace_mgr.Enabled():
+             hcl.mutate((y_size, x_size), trace_sram, 'trace_sram')
++    '''
++def top(target=None):
++    hcl.init()
++    instr = hcl.placeholder((), name="instr", dtype=hcl.UInt(32))
++    s = hcl.create_schedule([instr, state.OUT_MEM, state.DRAM], store)
++    return hcl.build(s, target=target)
++    
++if __name__ == "__main__":
++    f = top(target="merlinc")
++    print(f)
+diff --git a/vta/python/vta/beh/state.py b/vta/python/vta/beh/state.py
+index 7c4ebb7e7..9a905eb3e 100644
+--- a/vta/python/vta/beh/state.py
++++ b/vta/python/vta/beh/state.py
+@@ -1,7 +1,8 @@
+ '''internal state of the machine'''
++from config import env
++import config
+ import heterocl as hcl
+-from .config import env
+-from . import config
++#from . import config
+ 
+ INP_MEM = hcl.placeholder((env.INP_BUFF_SIZE, env.BATCH, env.BLOCK_IN,),
+                           name='inp_mem', dtype=hcl.UInt(config.DATA_WIDTH))
+diff --git a/vta/python/vta/environment.py b/vta/python/vta/environment.py
+index 874025c56..f39c1d689 100644
+--- a/vta/python/vta/environment.py
++++ b/vta/python/vta/environment.py
+@@ -23,7 +23,8 @@ import json
+ import copy
+ import tvm
+ from tvm import te
+-from . import intrin
++#from . import intrin
++import intrin
+ 
+ def get_vta_hw_path():
+     """Get the VTA HW path."""
