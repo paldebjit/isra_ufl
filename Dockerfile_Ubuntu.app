@@ -17,25 +17,6 @@
 
 FROM ubuntu:18.04
 MAINTAINER Debjit Pal <work.debjitpal@gmail.com>
-RUN apt-get clean all
-RUN apt-get update && \
-    apt-get -y install wget git
-#RUN wget \
-#    https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
-#    --no-check-certificate && \
-#    chmod u+x Miniconda3-latest-Linux-x86_64.sh && \
-#    /bin/bash Miniconda3-latest-Linux-x86_64.sh -b -p /opt/conda && \
-#    rm -rf Miniconda3-latest-Linux-x86_64.sh && \
-#    /opt/conda/bin/conda upgrade -y --all && \
-#    /opt/conda/bin/conda install -y conda-build conda-verify && \
-#    /opt/conda/bin/conda create -y --name srgtut python=3.7 && \
-#    /opt/conda/bin/conda install -n srgtut -c conda-forge -y vim emacs tmux && \
-#    /opt/conda/bin/conda install -n srgtut -c anaconda -y git && \
-#    /opt/conda/bin/conda clean -ya
-#
+
 ADD ./hostdir /opt/hostdir
 WORKDIR /opt/hostdir
-#
-#ENV PATH /opt/conda/bin:$PATH
-#
-#ENTRYPOINT ["conda", "run", "-n", "srgtut", "python", "app/myapp.py"]
