@@ -32,8 +32,8 @@ then
 		echo "Setting DOCKER_BUILDKIT environment variables.."
 		export DOCKER_BUILDKIT=1
 	fi
-	docker build --network=host -f Dockerfile_${2}.${1} -t ${USER}/vta .
+	docker build --network=host -f Dockerfile_${1} -t ${USER}/hcl_isra .
 	docker run -v $pwd/hostdir:/opt/hostdir \
                -h docker \
-               -it ${USER}/vta:latest
+               -it ${USER}/hcl_isra:latest
 fi
